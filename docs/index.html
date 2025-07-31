@@ -2,69 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guess the Number!</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 2rem;
-      background: #f5f5f5;
-    }
-    h1 {
-      color: #333;
-    }
-    input[type="number"] {
-      padding: 0.5rem;
-      font-size: 1rem;
-      width: 60px;
-    }
-    button {
-      padding: 0.5rem 1rem;
-      margin: 1rem;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    #result {
-      margin-top: 1rem;
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guessing Game</title>
 </head>
 <body>
-  <h1>🎯 Guess the Number (1–100)</h1>
-  <input type="number" id="guess" min="1" max="100" />
-  <button onclick="makeGuess()">Guess</button>
-  <button onclick="resetGame()">Reset</button>
+  <h1>Guess the Number (1-100)</h1>
+
+  <input type="number" id="guessInput" placeholder="Enter your guess" />
+  <button id="guessBtn">Guess</button>
+  <button id="resetBtn">Reset</button>
+
   <p id="result"></p>
 
   <script type="module">
-    import init, { handle_guess, reset } from "./pkg/guessing_game_web.js";
+    import init, { start_game, check_guess, reset_game } from "./pkg/guessing_game_web.js";
 
-    let wasmLoaded = false;
-
-    async function start() {
+    async function run() {
       await init();
-      wasmLoaded = true;
-      reset(); // Generate a new random number on load
+      start_game();
+
+      const result = document.getElementById("result");
+      const input = document.getElementById("guessInput");
+
+      document.getElementById("guessBtn").addEventListener("click", () => {
+        const guess = parseInt(input.value);
+        const feedback = check_guess(guess);
+        result.textContent = feedback;
+      });
+
+      document.getElementById("resetBtn").addEventListener("click", () => {
+        reset_game();
+        result.textContent = "Game reset!";
+        input.value = "";
+      });
     }
 
-    start();
-
-    window.makeGuess = function () {
-      if (!wasmLoaded) return;
-      const guess = parseInt(document.getElementById("guess").value);
-      const result = handle_guess(guess);
-      document.getElementById("result").textContent = result;
-    };
-
-    window.resetGame = function () {
-      if (!wasmLoaded) return;
-      reset();
-      document.getElementById("result").textContent = "";
-      document.getElementById("guess").value = "";
-    };
+    run();
   </script>
 </body>
 </html>
