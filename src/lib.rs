@@ -2,7 +2,6 @@ use wasm_bindgen::prelude::*;
 use std::cell::RefCell;
 use std::rc::Rc;
 
-// Define shared state
 thread_local! {
     static SECRET_NUMBER: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
 }
