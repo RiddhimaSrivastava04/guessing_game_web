@@ -3,6 +3,7 @@ import init, { reset_game, check_guess } from "../pkg/guessing_game_web.js";
 async function run() {
   await init();
   reset_game();
+  start_game();
 }
 
 window.makeGuess = () => {
@@ -12,4 +13,5 @@ window.makeGuess = () => {
 };
 
 run();
+
 

@@ -1,14 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Guessing Game</title>
+    <meta charset="UTF-8">
+    <title>Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #333;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
 </head>
 <body>
-  <h1>Rust Guessing Game (Web)</h1>
-  <input id="guess" type="number" />
-  <button onclick="makeGuess()">Guess</button>
-  <p id="result"></p>
-  <script type="module" src="main.js"></script>
+    <h1>Guess the Number (1 to 100)</h1>
+    <input type="number" id="guess" placeholder="Enter your guess" />
+    <br>
+    <button onclick="check()">Submit</button>
+    <button onclick="reset()">Reset</button>
+    <div id="result"></div>
+
+    <script type="module">
+        import init, { check_guess, reset_game } from "../pkg/guessing_game_web.js";
+
+        async function run() {
+            await init();
+
+            window.check = () => {
+                const input = document.getElementById("guess");
+                const result = document.getElementById("result");
+                const guess = parseInt(input.value);
+                if (isNaN(guess)) {
+                    result.textContent = "Please enter a valid number.";
+                    return;
+                }
+                const response = check_guess(guess);
+                result.textContent = response;
+            };
+
+            window.reset = () => {
+                reset_game();
+                document.getElementById("result").textContent = "Game reset! Try again.";
+                document.getElementById("guess").value = "";
+            };
+        }
+
+        run();
+    </script>
 </body>
 </html>
+

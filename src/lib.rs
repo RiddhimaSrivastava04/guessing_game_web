@@ -1,28 +1,28 @@
 use wasm_bindgen::prelude::*;
+use js_sys::Math;
 use std::cell::RefCell;
-use std::rc::Rc;
 
 thread_local! {
-    static SECRET_NUMBER: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
-}
-
-#[wasm_bindgen]
-pub fn reset_game() {
-    use rand::Rng;
-    let secret = rand::thread_rng().gen_range(1..=100);
-    SECRET_NUMBER.with(|s| *s.borrow_mut() = secret);
+    static SECRET_NUMBER: RefCell<u32> = RefCell::new(((Math::random() * 100.0).floor() as u32) + 1);
 }
 
 #[wasm_bindgen]
 pub fn check_guess(guess: u32) -> String {
-    SECRET_NUMBER.with(|s| {
-        let secret = *s.borrow();
-        if guess < secret {
+    SECRET_NUMBER.with(|secret| {
+        let number = *secret.borrow();
+        if guess < number {
             "Too small!".to_string()
-        } else if guess > secret {
+        } else if guess > number {
             "Too big!".to_string()
         } else {
-            "You guessed it!".to_string()
+            "Correct! 🎉".to_string()
         }
     })
+}
+
+#[wasm_bindgen]
+pub fn reset_game() {
+    SECRET_NUMBER.with(|secret| {
+        *secret.borrow_mut() = ((Math::random() * 100.0).floor() as u32) + 1;
+    });
 }
