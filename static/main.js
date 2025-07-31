@@ -1,4 +1,4 @@
-import init, { reset_game, check_guess } from "../pkg/guessing_game_web.js";
+import init, { reset_game, check_guess } from "../docs/pkg/guessing_game_web.js";
 
 async function run() {
   await init();
