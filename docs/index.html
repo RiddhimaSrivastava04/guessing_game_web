@@ -1,32 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Guessing Game</title>
+  <meta charset="UTF-8" />
+  <title>Guessing Game</title>
 </head>
 <body>
-    <h1>Guess the Number!</h1>
-    <input id="guessInput" type="number" />
-    <button id="guessBtn">Guess</button>
-    <button id="resetBtn">Reset</button>
-    <p id="result"></p>
+  <h1>Guess the Number!</h1>
+  <input id="guessInput" type="number" placeholder="Enter a number" />
+  <button id="guessBtn">Guess</button>
+  <button id="resetBtn">Reset</button>
+  <p id="result"></p>
 
-    <script type="module">
-        import init, { check_guess, reset_game } from "./pkg/guessing_game_web.js";
+  <script type="module">
+    import init, { check_guess, reset_game } from "./pkg/guessing_game_web.js";
 
-        async function run() {
-            await init();
-            document.getElementById("guessBtn").onclick = () => {
-                const val = parseInt(document.getElementById("guessInput").value);
-                document.getElementById("result").textContent = check_guess(val);
-            };
-            document.getElementById("resetBtn").onclick = () => {
-                reset_game();
-                document.getElementById("result").textContent = "";
-            };
+    async function run() {
+      await init();
+
+      const guessInput = document.getElementById("guessInput");
+      const result = document.getElementById("result");
+      const guessBtn = document.getElementById("guessBtn");
+      const resetBtn = document.getElementById("resetBtn");
+
+      guessBtn.addEventListener("click", () => {
+        const guess = parseInt(guessInput.value);
+        if (isNaN(guess)) {
+          result.textContent = "Please enter a valid number.";
+        } else {
+          const feedback = check_guess(guess);
+          result.textContent = feedback;
         }
+      });
 
-        run();
-    </script>
+      resetBtn.addEventListener("click", () => {
+        reset_game();
+        guessInput.value = "";
+        result.textContent = "Game reset. Try again!";
+      });
+    }
+
+    run();
+  </script>
 </body>
 </html>

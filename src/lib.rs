@@ -1,5 +1,4 @@
 use wasm_bindgen::prelude::*;
-use web_sys::{window, HtmlInputElement};
 use js_sys::Math;
 
 static mut SECRET: u32 = 0;
